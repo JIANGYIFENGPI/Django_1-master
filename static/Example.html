@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrator Page</title>
+
+    <style type="text/css">
+        
+        .ljy-table {
+    border: solid 1px #DDEEEE;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.ljy-table thead th {
+    background-color: #DDEFEF;
+    border: solid 1px #DDEEEE;
+    color: #336B6B;
+    padding: 10px;
+    text-align: left;
+    text-shadow: 1px 1px 1px #fff;
+}
+.ljy-table tbody td {
+    border: solid 1px #DDEEEE;
+    color: #333;
+    padding: 10px;
+    text-shadow: 1px 1px 1px #fff;
+}
+.ljy-table-highlight-all {
+    overflow: hidden;
+    z-index: 1;
+}
+.ljy-table-highlight-all tbody td, .ljy-table-highlight-all thead th {
+    position: relative;
+}
+.ljy-table-highlight-all tbody td:hover::before {
+    background-color: #CCE7E7;
+    content:'\00a0';
+    height: 100%;
+    left: -5000px;
+    position: absolute;
+    top: 0;
+    width: 10000px;
+    z-index: -1;
+}
+.ljy-table-highlight-all tbody td:hover::after {
+    background-color: #CCE7E7;
+    content:'\00a0';
+    height: 10000px;
+    left: 0;
+    position: absolute;
+    top: -5000px;
+    width: 100%;
+    z-index: -1;
+}
+
+
+    </style>
+
+</head>
+
+<h1>Login Page</h1>
+<hr>
+
+<body>
+<table  class='ljy-table ljy-table-rounded ljy-table-highlight-all'>
+    <tr>
+        <td for="txtName">Username:</td>
+        <td><input type="text" id="user" autofocus value=""></td>
+    </tr>
+    <tr>
+        <td for="txtPassword">Password:</td>
+        <td><input type="password" id="password" value=""></td>
+    </tr>
+    <tr>
+        <td>
+            <button onClick="getCourses()"> Login and List Services</button>
+        </td>
+    </tr>
+</table>
+
+
+<div id="id1"></div>
+
+
+<body>
+
+<script>
+
+function getCourses(){
+    var request = new XMLHttpRequest();
+    request.open("GET", "http://localhost:8000/books/", false);
+    request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+    request.send();
+    var array = JSON.parse(request.responseText);
+    var temp="<table class='ljy-table ljy-table-rounded ljy-table-highlight-all'><tr><th>id</th><th>Book Name</th><th>Author</th><th>Price</th><th>Publish_Date</th></tr>";
+    for(var i=0;i<array.length;i++){
+        var url = array[i].url;
+        var name = array[i].bookname;
+        var aut = array[i].directors;
+	    var date = array[i].publish_date;
+        temp+="<tr><td>"+url+"</td><td>" + name + "</td><td>" + aut + "</td><td>" + pri + "</td><td>" + date + "</td>" +
+        "<td><button onClick=putCourses('"+ url +"')>Edit</button>" + "</td>" +
+        "<td><button onClick=deleteCourses('"+ url +"')>Delete</button>" + "</td></tr>";
+
+    }
+    console.log(temp);
+    temp+="</table>";
+    document.getElementById("id1").innerHTML = temp;
+}
+
+
+function putCourses(url){
+	var request = new XMLHttpRequest();
+	request.open("GET", url, false);
+    request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+    request.send();
+    var array = JSON.parse(request.responseText);
+	var temp="<table  class='ljy-table ljy-table-rounded ljy-table-highlight-all'><tr><th>id</th><th>Book Name</th><th>Author</th><th>Price</th><th>Publish Date</th></tr>";
+	temp+="<tr><td>"+array.url+"</td><td>" + array.moviename + "</td><td>" + array.directors + "</td><td>"  + array.publish_date + "</td></tr>";
+	temp+="<tr><td><input type='text' value = '"+ url +"'>"+ "</td>" + 
+          "<td><input type='text' id = 'nMoviename' value = '"+ array.moviename +"'>" + "</td>" +
+          "<td><input type='text' id = 'ndirectors'  value = '"+ array.directors +"'>" + "</td>" +
+          "<td><input type='text' id = 'nPublish'  value = '"+ array.publish_date + "'>" + "</td>" +
+          "<td><button onClick=fixCourses('" + url + "')>Confirm</button>" + "</td></tr>";
+	console.log(temp);
+    temp+="</table>";
+    document.getElementById("id1").innerHTML = temp;
+}
+
+function fixCourses(url){
+    var request = new XMLHttpRequest();
+    request.open("PUT", url, false);
+
+    var jsonData = '{"moviename":'+ JSON.stringify(document.getElementById('nMoviename').value)
+                +',"directors":'+ JSON.stringify(document.getElementById('ndirectors').value)
+                +',"publish_date":'+ JSON.stringify(document.getElementById('nPublish').value) + '}';
+    request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+    request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(jsonData);
+    var array = JSON.parse(request.responseText);
+    console.log(array);
+    alert("Save successfully!");
+}
+
+function deleteCourses(url){
+    var request = new XMLHttpRequest();
+    request.open("DELETE", url, false);
+    request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+    request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(null);
+    alert("Delete successfully!");
+    var func = getCourses();
+    func();
+}
+
+</script>
+
+<hr>
+
+
+<table  class='ljy-table ljy-table-rounded ljy-table-highlight-all' id = "niubi">
+    <br>
+
+
+    <tr>
+
+        <td>
+        <th>Movie Name:</th>
+        </td>
+
+        <td><input type="text" id="Movies"></td>
+
+    </tr>
+
+    <tr>
+
+        <td>
+        <th>Directors:</th>
+        </td>
+
+        <td><input type="text" id="Directors"></td>
+
+    </tr>
+
+  
+    <tr>
+
+        <td>
+        <th>Publish Date:</th>
+        </td>
+
+        <td><input type="date" id="date"></td>
+
+    </tr>
+
+</table>
+
+<table class='ljy-table ljy-table-rounded ljy-table-highlight-all'>
+    <tr>
+        <th>
+            <button onClick="postMovies()">Add information</button>
+        </th>
+    </tr>
+</table>
+
+<script>
+function postBooks(){
+ var movieName=document.getElementById("movies");
+ var movieDirector = document.getElementById("director");
+ var movieDate = document.getElementById("date");
+ var jsonData = '{"moviename":'+JSON.stringify(movie.value)
+				+',"directors":'+JSON.stringify(movieDirector.value)
+				+',"publish_date":'+JSON.stringify(bookDate.value) + '}';
+ var request = new XMLHttpRequest();
+ request.open("POST", "http://localhost:8000/books/", false);
+ request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+ request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+ request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+ request.send(jsonData);
+ var array = JSON.parse(request.responseText);
+ console.log(array);
+ alert("Post successfully!"); 
+document.getElementById("movies").value = "";
+document.getElementById("director").value = "";
+document.getElementById("date").value = "";
+
+
+}
+
+ function readCookie(bookname) {
+ var nameEQ = encodeURIComponent(bookname) + "=";
+ var ca = document.cookie.split(';');
+ for (var i = 0; i < ca.length; i++) {
+ var c = ca[i];
+ while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+ if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+ }
+ return null;
+}
+
+
+</script>
+
+</body>
+</html>
