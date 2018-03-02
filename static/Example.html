@@ -89,17 +89,17 @@
 
 function getCourses(){
     var request = new XMLHttpRequest();
-    request.open("GET", "http://localhost:8000/books/", false);
+    request.open("GET", "http://localhost:8000/courses/", false);
     request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
     request.send();
     var array = JSON.parse(request.responseText);
-    var temp="<table class='ljy-table ljy-table-rounded ljy-table-highlight-all'><tr><th>id</th><th>Book Name</th><th>Author</th><th>Price</th><th>Publish_Date</th></tr>";
+    var temp="<table class='ljy-table ljy-table-rounded ljy-table-highlight-all'><tr><th>id</th><th>teacher Name</th><th>code</th></tr>";
     for(var i=0;i<array.length;i++){
         var url = array[i].url;
-        var name = array[i].bookname;
-        var aut = array[i].directors;
+        var name = array[i].teachername;
+        var aut = array[i].code;
 	    var date = array[i].publish_date;
-        temp+="<tr><td>"+url+"</td><td>" + name + "</td><td>" + aut + "</td><td>" + pri + "</td><td>" + date + "</td>" +
+        temp+="<tr><td>"+url+"</td><td>" + name + "</td><td>" + code + "</td><td>" +
         "<td><button onClick=putCourses('"+ url +"')>Edit</button>" + "</td>" +
         "<td><button onClick=deleteCourses('"+ url +"')>Delete</button>" + "</td></tr>";
 
@@ -116,12 +116,11 @@ function putCourses(url){
     request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
     request.send();
     var array = JSON.parse(request.responseText);
-	var temp="<table  class='ljy-table ljy-table-rounded ljy-table-highlight-all'><tr><th>id</th><th>Book Name</th><th>Author</th><th>Price</th><th>Publish Date</th></tr>";
+	var temp="<table  class='ljy-table ljy-table-rounded ljy-table-highlight-all'><tr><th>id</th><th>Teacher Name</th><th>Code</th></tr>";
 	temp+="<tr><td>"+array.url+"</td><td>" + array.moviename + "</td><td>" + array.directors + "</td><td>"  + array.publish_date + "</td></tr>";
 	temp+="<tr><td><input type='text' value = '"+ url +"'>"+ "</td>" + 
-          "<td><input type='text' id = 'nMoviename' value = '"+ array.moviename +"'>" + "</td>" +
-          "<td><input type='text' id = 'ndirectors'  value = '"+ array.directors +"'>" + "</td>" +
-          "<td><input type='text' id = 'nPublish'  value = '"+ array.publish_date + "'>" + "</td>" +
+          "<td><input type='text' id = 'nTeachername' value = '"+ array.moviename +"'>" + "</td>" +
+          "<td><input type='text' id = 'ncode'  value = '"+ array.directors +"'>" + "</td>" +
           "<td><button onClick=fixCourses('" + url + "')>Confirm</button>" + "</td></tr>";
 	console.log(temp);
     temp+="</table>";
@@ -134,7 +133,7 @@ function fixCourses(url){
 
     var jsonData = '{"moviename":'+ JSON.stringify(document.getElementById('nMoviename').value)
                 +',"directors":'+ JSON.stringify(document.getElementById('ndirectors').value)
-                +',"publish_date":'+ JSON.stringify(document.getElementById('nPublish').value) + '}';
+                 + '}';
     request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
     request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -168,34 +167,24 @@ function deleteCourses(url){
     <tr>
 
         <td>
-        <th>Movie Name:</th>
+        <th>Teacher name:</th>
         </td>
 
-        <td><input type="text" id="Movies"></td>
+        <td><input type="text" id="teacher"></td>
 
     </tr>
 
     <tr>
 
         <td>
-        <th>Directors:</th>
+        <th>code:</th>
         </td>
 
-        <td><input type="text" id="Directors"></td>
+        <td><input type="text" id="code"></td>
 
     </tr>
 
   
-    <tr>
-
-        <td>
-        <th>Publish Date:</th>
-        </td>
-
-        <td><input type="date" id="date"></td>
-
-    </tr>
-
 </table>
 
 <table class='ljy-table ljy-table-rounded ljy-table-highlight-all'>
@@ -208,14 +197,14 @@ function deleteCourses(url){
 
 <script>
 function postBooks(){
- var movieName=document.getElementById("movies");
- var movieDirector = document.getElementById("director");
- var movieDate = document.getElementById("date");
- var jsonData = '{"moviename":'+JSON.stringify(movie.value)
-				+',"directors":'+JSON.stringify(movieDirector.value)
-				+',"publish_date":'+JSON.stringify(bookDate.value) + '}';
+ var teacherName=document.getElementById("teacher");
+ var teacherCode = document.getElementById("code");
+ 
+ var jsonData = '{"teachername":'+JSON.stringify(teachername.value)
+				+',"code":'+JSON.stringify(teachercode.value)
+				
  var request = new XMLHttpRequest();
- request.open("POST", "http://localhost:8000/books/", false);
+ request.open("POST", "http://localhost:8000/course/", false);
  request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
  request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
  request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -223,9 +212,9 @@ function postBooks(){
  var array = JSON.parse(request.responseText);
  console.log(array);
  alert("Post successfully!"); 
-document.getElementById("movies").value = "";
-document.getElementById("director").value = "";
-document.getElementById("date").value = "";
+document.getElementById("name").value = "";
+document.getElementById("code").value = "";
+
 
 
 }
