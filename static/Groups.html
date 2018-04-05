@@ -6,10 +6,16 @@
 		<title>Groups Page</title>
 			
 			<link rel="stylesheet" href="main.css">
+            
 	</head>
-		<div id="id1"></div>
-
+		
 	<body>
+        <div class="button">
+			<a href="Curriculum.html">Curriculum</a>
+		</div>
+        
+        <div id="id1"></div>
+
 		<script>
 			getGroups();
 			function getGroups(){
@@ -18,14 +24,15 @@
 				request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
 				request.send();
 				var array = JSON.parse(request.responseText);
-				var temp="<tr><th>id</th><th>Code</th><th>Degree Program</th></tr>";
+				var temp="<table><tr><th>Code</th><th>Degree Program</th></tr>";
 				
 				for(var i=0;i<array.length;i++){
 					var url = array[i].url;
 					var code = array[i].code;
-					var dp = array[i].degree_program;
-					temp+="<tr><td>"+url+"</td><td>" + code + "</td><td>" + dp + "</td>" +
-					"<td><button onclick=getCourseslist('"+ url +"')>Courses</button>"+"</td></tr>"; 
+					var dp = array[i].degreeprogram;
+					temp+="<tr><td>" + code + "</td><td>" + dp + "</td>" +
+					//"<td><button onclick=getCourseslist('"+ url +"')>Courses</button>"+
+                    "</td></tr>"; 
 				}
 				console.log(temp);
 				temp+="</table>";
@@ -75,7 +82,5 @@
 		</script>
 		</body>
 </body>
-		<div class="button">
-			<a href="Curriculum.html">Curriculum</a>
-		</div>
+
 </html>

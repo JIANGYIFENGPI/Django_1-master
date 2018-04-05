@@ -5,34 +5,39 @@
 		<meta charset="UTF-8">
 		<title>Courses Page</title>
 			
-			<link rel="stylesheet" href="main.css">
-	</head>
-		<div id="id1"></div>
+        <link rel="stylesheet" href="main.css">
+    
+    </head>
+
 
 
 	<body>
-		<script>
-			getCourses();
+        <div class="button">
+			<a href="insertCourses.html">Insert New Courses</a>
+		</div>
+        <div class="button">
+			<a href="Curriculum.html">Curriculum</a>
+		</div>
+		<div id="id1">
+            <button onClick="getCourses()">List services</button>
+		</div>
+        
+        <script>
 			function getCourses(){
 				var request = new XMLHttpRequest();
 				request.open("GET", "http://localhost:8000/courses/", false);
 				request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
 				request.send();
-
+                var temp = "<table>";
 				var array = JSON.parse(request.responseText);
-				var temp="<tr><th>id</th><th>Course Code</th><th>Course Name</th><th>Type</th><th>Language</th><th>credit</th></tr>";
+				temp += "<tr><th>Course Code</th><th>Course Name</th><th>Language</th><th>credit</th></tr>";
 				for(var i=0;i<array.length;i++){
 					var url = array[i].url;
-					var code = array[i].code;
-					var name = array[i].name;
-					var teacher = array[i].type;
-					var language = array[i].language;
-					var cr = array[i].credit;
-					var curriculumid = array[i].curriculumid;
-					var iId = array[i].implementid;
-					temp+="<tr><td>"+url+"</td><td>" + code + "</td><td>" + name + "</td><td>" + type + "</td><td>" + language + "</td><td>" + credit +"</td>" +
-					"<td><button onclick=getCurriculums('"+ curriculumid +"')>Curriculums</button>" + "</td>"+
-					"<td><button onclick=getImplement('"+ iId +"')>Teacher</button>"+"</td></tr>";
+					
+					temp+="<tr><td>" + array[i].code + "</td><td>" + array[i].name + "</td><td>" + array[i].lan + "</td><td>" + array[i].cr +"</td>" +
+					//"<td><button onclick=getCurriculums('"+ curriculumid +"')>Curriculums</button>" + "</td>"+
+					//"<td><button onclick=getImplement('"+ iId +"')>Teacher</button>"+
+                    "</td></tr>";
 				}
 				console.log(temp);
 				temp+="</table>";
@@ -40,7 +45,7 @@
 				
 			}
 			
-			function getCurriculums(curriculumid){
+			/*function getCurriculums(curriculumid){
 				var request = new XMLHttpRequest();
 				request.open("GET", curriculumid, false);
 				request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
@@ -72,22 +77,20 @@
 					
 				}
 				
-				/*for(var i=0;i<array.length;i++){
+				for(var i=0;i<array.length;i++){
 					var url = array[i].url;
 					var code = array[i].code;
 					var name = array[i].name;
 					temp+="<tr><td>"+url+"</td><td>" + code + "</td><td>" + name + "</td></tr>";
-				}*/
+				}
 				
 				console.log(temp);
 				temp+="</table>"+"<div class=button onClick=getCourses()><a>Get Courses</a></div>";
 				document.getElementById("id1").innerHTML = temp;
-			}
+			}*/
 		</script>
 	</body>
-		<div class="button">
-			<a href="insertCourses.html">Insert New Courses</a>
-		</div>
+
 	
 		
 </html>

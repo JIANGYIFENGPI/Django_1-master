@@ -5,10 +5,17 @@
 		<meta charset="UTF-8">
 		<title>Teacher Page</title>
 			<link rel="stylesheet" href="main.css">
+            
 	</head>
-		<div id="id2"></div>
+		
 
 	<body>
+
+        <div class="button">
+			<a href="Curriculum.html">Curriculum</a>
+		</div>
+        <div id="id2"></div>
+        
 		<script>
 			getTeachers();
 			function getTeachers(){
@@ -17,13 +24,13 @@
 				request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
 				request.send();
 				var array = JSON.parse(request.responseText);
-				var temp="<tr><th>id</th><th>Teacher Code</th><th>Teacher Name</th></tr>";
+				var temp="<table><tr><th>Teacher Code</th><th>Teacher Name</th></tr>";
 				
 				for(var i=0;i<array.length;i++){
 					var url = array[i].url;
 					var code = array[i].code;
 					var name = array[i].name;
-					temp+="<tr><td>"+url+"</td><td>" + code + "</td><td>" + name + "</td></tr>";
+					temp+="<tr><td>" + code + "</td><td>" + name + "</td></tr>";
 				}
 				console.log(temp);
 				temp+="</table>"+"<div class=button onClick=getImplement()><a>Get Implements</a></div>";
@@ -35,7 +42,5 @@
 		</script>
 		</body>
 </body>
-		<div class="button">
-			<a href="Curriculum.html">Curriculum</a>
-		</div>
+		
 </html>
